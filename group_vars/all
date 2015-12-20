@@ -1,0 +1,37 @@
+---
+# Which version of Wordpress to deploy
+wp_version: 4.4
+wp_sha256sum: e1fc166b53ecd5c887a1bb60e3bb176839a0848cfe7c902e723a38c62a1ea3ae
+
+# These are the Wordpress database settings
+wp_db_name: wordpress 
+wp_db_user: wordpress
+wp_db_password: secret
+
+# You shouldn't need to change this.
+mysql_port: 3306
+
+# This is used for the nginx server configuration, but access to the
+# Wordpress site is not restricted by a named host.
+server_hostname: www.example.com
+
+# Disable All Updates
+# By default automatic updates are enabled, set this value to true to disable all automatic updates
+auto_up_disable: false
+
+#Define Core Update Level
+#true  = Development, minor, and major updates are all enabled
+#false = Development, minor, and major updates are all disabled
+#minor = Minor updates are enabled, development, and major updates are disabled
+core_update_level: true
+
+# cloudstack用設定
+cs_ssh_key_name: demosshkey
+cs_vm_name: demowordpress
+cs_vm_spec: light.S1
+## 環境ごとの設定必須
+# cs_api_url: ""
+# cs_public_ip: ""
+# cs_api_key: ""
+# cs_secret_key: ""
+# cs_ssh_public_key: ""
