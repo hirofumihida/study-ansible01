@@ -1,0 +1,23 @@
+---
+- name: mysql-serverをインストール
+  yum:
+    name: "{{ mysql_project_name }}-server"
+
+- name: MySQL-pythonパッケージをインストール
+  yum: name=MySQL-python state=present
+  when: ansible_distribution != "Amazon"
+
+- name: MySQL-python27パッケージをインストール
+  yum: name=MySQL-python27 state=present
+  when: ansible_distribution == "Amazon"
+
+- name: mysql設定ファイルを設置
+  template: src=my.cnf.j2 dest=/etc/my.cnf
+  notify: 
+  - mysql再起動
+
+- name: mysqlを起動
+  service:
+    name: "{{ mysql_daemon_name }}"
+    state: started
+    enabled: yes

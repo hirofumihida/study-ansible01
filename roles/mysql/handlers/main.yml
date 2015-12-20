@@ -1,0 +1,5 @@
+---
+- name: mysql再起動
+  service:
+    name: "{{ mysql_daemon_name }}"
+    state: restarted

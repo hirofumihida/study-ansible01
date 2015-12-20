@@ -1,0 +1,35 @@
+---
+- name: python 2.7をデフォルトとして設定(AmazonLinux)
+  alternatives:
+    name: python
+    link: /usr/bin/python
+    path: /usr/bin/python2.7
+  when: ansible_distribution == "Amazon"
+
+- name: selinux関連モジュールをインストール
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - selinux-policy-targeted
+    - policycoreutils-python
+    - libselinux-python
+
+- name: EPELリポジトリを登録
+  yum:
+    name: epel-release
+
+- name: SELinuxをpermissiveモードに設定
+  selinux: policy=targeted state=permissive
+
+- name: iptablesを停止(RHEL6系)
+  service:
+    name: iptables
+    state: stopped
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int < 7
+
+- name: firewalldを停止(RHEL7系)
+  service:
+    name: firewalld
+    state: stopped
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version|int >= 7
