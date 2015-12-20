@@ -1,0 +1,43 @@
+---
+- name: Uninstall Wordpress, MySQL, Nginx, and PHP-FPM
+  hosts: wordpress-server
+  sudo: yes
+  tasks:
+    - name: mysql-serverをアンインストール（初回）
+      yum: name=mysql-server state=absent
+      ignore_errors: yes
+      when: ansible_distribution == "Amazon"
+
+    - name: MySQL-pythonをアンインストール
+      yum: name=MySQL-python state=absent
+      when: ansible_distribution != "Amazon"
+
+    - name: MySQL-python27をアンインストール
+      yum: name=MySQL-python27 state=absent
+      when: ansible_distribution == "Amazon"
+
+    - name: モジュールをアンインストール
+      yum: name={{ item }} state=absent
+      with_items:
+        - mysql-server
+        - mariadb-server
+        - mysql
+        - mariadb
+        - nginx
+        - php
+        - php-fpm
+        - php-enchant
+        - php-IDNA_Convert
+        - php-mbstring
+        - php-mysql
+        - php-PHPMailer
+        - php-process
+        - php-simplepie
+        - php-xml
+
+    - name: 設置済みファイルを削除
+      file: path={{ item }} state=absent
+      with_items:
+        - /srv/wordpress
+        - /etc/my.cnf
+        - /var/lib/mysql
